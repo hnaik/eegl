@@ -1,0 +1,15 @@
+---
+run_id: "dev"
+iterations:
+  - 0
+root_path: /data/results
+variants:
+  - p001
+sample_ids:
+  - "0001"
+steps:
+  # - type: train
+  #   num_epochs: 1000
+  # - type: explain
+  #   num_epochs: 100
+  - type: annotate

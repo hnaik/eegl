@@ -1,0 +1,16 @@
+name: egr
+channels:
+  - conda-forge
+  - nvidia
+  - pytorch
+dependencies:
+  - coloredlogs
+  - joblib
+  - networkx
+  - optuna
+  - pandas
+  - pyg::pyg
+  - pytorch::pytorch
+  - pytorch::pytorch-cuda==12.4
+  - rdflib
+  - scikit-learn

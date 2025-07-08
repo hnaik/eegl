@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: egr-{{ job_id }}
+  namespace: hnaik2
+  labels:
+    app: egr-{{ job_id }}
+spec:
+  dnsConfig:
+    nameservers:
+      - 8.8.8.8
+  tolerations:
+    - key: {{ machine_class }}
+      operator: "Exists"
+      effect: "NoSchedule"
+  nodeSelector:
+    nvidia.com/gpu.product: {{ machine_class }}
+  containers:
+    - image: {{ docker_image }}
+      imagePullPolicy: Always
+      name: egr-{{ job_id }}
+      args: ["/bin/bash", "/home/hnaik/git/egr/scripts/pod_startup.sh"]
+      workingDir: /home/hnaik/git/egr
+      env:
+        - name: INSIDE_DOCKER
+          value: "1"
+        - name: EGR_SRC
+          value: /home/hnaik/git/egr
+        - name: PYTHONPATH
+          value: /home/hnaik/git/egr
+        - name: EGR_PY_HOME
+          value: /home/hnaik/git/egr/.venv
+      resources:
+        limits:
+          nvidia.com/gpu.shared: {{ num_gpus }}
+        requests:
+          memory: "100Mi"
+      volumeMounts:
+        - name: nfs-data
+          mountPath: /data
+        - name: nfs-home
+          mountPath: /home
+        - name: dshm
+          mountPath: /dev/shm
+  volumes:
+    - name: nfs-data
+      nfs:
+        server: 10.2.100.2
+        path: /data/nfs/hnaik2
+    - name: nfs-home
+      nfs:
+        server: 10.2.100.2
+        path: /data/nfs/hnaik2/sysroot/home
+    - name: nfs-opt
+      nfs:
+        server: 10.2.100.2
+        path: /data/nfs/hnaik2/sysroot/opt
+    - name: dshm
+      emptyDir:
+        medium: Memory
+  restartPolicy: Never

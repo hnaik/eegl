@@ -1,0 +1,42 @@
+---
+iterations:
+  - 0
+  - 1
+  - 2
+fold:
+  begin: 1
+  end: 10
+  max: 10
+cuda: 0
+gpu: true
+gaston_freq_threshold: 0.7
+random_feature_id: 1
+annotate_dim: auto
+feature_generation_method: fsg
+reproducibility:
+  enable: true
+  torch_manual_seed: 0
+input_data_root: ./dataset
+output_root: ./.output
+steps:
+  train:
+    name: Train
+    average_strategy: weighted
+    confusion_matrix_normalize: all
+    implementation: pyg
+  explain:
+    name: Explain
+    denoise_threshold: 15
+    mask_act: sigmoid
+    mask_bias: false
+    num_epochs: 200
+    implementation: pyg
+    max_explanations: 1.0
+  histogram:
+    name: Histograms
+  annotate:
+    name: Filtering and Annotation
+    average_strategy: binary
+    maximal_only: false
+    intermediate: true
+    largest_frequent_pattern: 15

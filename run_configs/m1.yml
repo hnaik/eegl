@@ -1,0 +1,43 @@
+---
+run_id: datetime_tag:c60
+iterations:
+  - 0
+  - 1
+  - 2
+fold:
+  begin: 1
+  end: 10
+reproducibility:
+  seed: 43
+hp_tuning:
+  enabled: true
+  n_trials: 10
+gaston_freq_threshold: 0.8
+input_data_root: ./dataset
+output_root: ./.output
+dataset:
+  src: egr
+  data_class: Orbits
+  init_features:
+    pad: true
+    dim: 8
+    default_value: 0.5
+    strategy: vanilla
+  pad_init_features:
+    dim: 8
+    strategy: vanilla
+  noise:
+    label: 0.1
+    # edge_addition: 0.1
+    # edge_removal: 0.1
+  params:
+    name: m1
+    force_reload: true
+    log: false
+steps:
+  - type: train
+  - type: explain
+    denoise_threshold: 18
+  - type: annotate
+    largest_frequent_pattern: 12
+    maximal_only: false

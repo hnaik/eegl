@@ -1,0 +1,19 @@
+---
+run_id: "230408-01"
+iterations:
+  - 0
+  - 1
+  - 2
+root_path: /results
+variants:
+  - p001-02
+sample_ids:
+  - "0001"
+  # - "0002"
+  # - "0003"
+  # - "0004"
+  # - "0005"
+steps:
+  - type: train
+  - type: explain
+  - type: annotate

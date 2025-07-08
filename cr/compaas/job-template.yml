@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: egr-{{ job_id }}
+  namespace: hnaik2
+  labels:
+    app: egr-{{ job_id }}
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      nodeSelector:
+        nvidia.com/gpu.product: {{ machine_class }}
+      containers:
+        - name: egr-{{ job_id }}
+          image: {{ docker_image }}
+          imagePullPolicy: Always
+          workingDir: /home/egr/egr
+          resources:
+            limits:
+              nvidia.com/gpu.shared: {{ num_gpus }}
+            requests:
+              memory: "4Gi"
+          volumeMounts:
+            - name: nfs-input
+              mountPath: /input
+            - name: output-volume
+              mountPath: /output
+            - name: cache-volume
+              mountPath: /cache
+            - name: nfs-output
+              mountPath: /results
+            - name: dshm
+              mountPath: /dev/shm
+          env:
+            - name: INSIDE_DOCKER
+              value: "1"
+            - name: PYTHONPATH
+              value: /home/egr/egr
+            - name: INPUT_FILE
+              value: {{ input_file }}
+      volumes:
+        - name: nfs-input
+          nfs:
+            server: 10.2.100.2
+            path: /data/nfs/hnaik2/results/job_input
+        - name: nfs-output
+          nfs:
+            server: 10.2.100.2
+            path: /data/nfs/hnaik2/results/job_output
+        - name: dshm
+          emptyDir:
+            medium: Memory
+        - name: cache-volume
+          emptyDir: {}
+        - name: output-volume
+          emptyDir:
+            medium: Memory
+      restartPolicy: Never
+  backoffLimit: 1

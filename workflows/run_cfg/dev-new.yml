@@ -1,0 +1,16 @@
+---
+run_id: "dev"
+iterations:
+  - 0
+  - 1
+  - 2
+root_path: /data/results
+variants:
+  - p0001
+sample_ids:
+  - "0001"
+steps:
+  - train
+  - explain
+  - histogram
+  - annotate

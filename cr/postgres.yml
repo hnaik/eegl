@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: egrpg
+  namespace: hnaik2
+  labels:
+    app: egrpg
+spec:
+  dnsConfig:
+    nameservers:
+      - 8.8.8.8
+  tolerations:
+    - key: "V100"
+      operator: "Exists"
+      effect: "NoSchedule"
+  containers:
+    - image: postgres:15.1
+      imagePullPolicy: IfNotPresent
+      name: egrpg
+      args: ["/bin/sleep", "infinity"]
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: egradmin
+        - name: POSTGRES_PASSWORD
+          value: lR62cMH0PvC0yRBm$Wq4596^
+        - name: POSTGRES_DB
+          value: egrdb
+        - name: POSTGRES_INITDB_ARGS
+          value: "--data-checksums"
+        - name: PGDATA
+          value: /data
+      resources:
+        limits:
+          nvidia.com/gpu: "0"
+        requests:
+          memory: "100Mi"
+      volumeMounts:
+        - name: nfs-data
+          mountPath: /data
+        - name: nfs-home
+          mountPath: /home
+        - name: nfs-opt
+          mountPath: /opt
+        - name: dshm
+          mountPath: /dev/shm
+  volumes:
+    - name: nfs-data
+      nfs:
+        server: 10.2.100.1
+        path: /data/nfs/hnaik2/pgdata/15
+    - name: nfs-home
+      nfs:
+        server: 10.2.100.1
+        path: /data/nfs/hnaik2/sysroot/home
+    - name: nfs-opt
+      nfs:
+        server: 10.2.100.1
+        path: /data/nfs/hnaik2/sysroot/opt
+    - name: dshm
+      emptyDir:
+        medium: Memory
+  restartPolicy: Never
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: egrpg-service
+  namespace: hnaik2
+spec:
+  selector:
+    app: egrpg
+  type: NodePort
+  ports:
+    - name: postgres
+      port: 9876
+      targetPort: 9876
+      protocol: TCP
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: egrpg-ingress-port1
+  namespace: hnaik2
+spec:
+  entryPoints:
+    - postgres
+  routes:
+    - match: Host(`compaasportal.evl.uic.edu`) && PathPrefix(`/egrpg`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: egrpg-service
+          port: 9876

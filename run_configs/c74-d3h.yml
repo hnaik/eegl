@@ -1,0 +1,55 @@
+---
+run_id: auto
+iterations:
+  - 0
+  - 1
+  - 2
+fold:
+  begin: 1
+  end: 5
+reproducibility:
+  rounds:
+    - 0
+  seed: 0
+hp_tuning:
+  enabled: true
+  n_trials: 200
+  defaults:
+    dropout: 0.1
+    hidden_dim: 43
+    epochs: 727
+    opt_params:
+      name: Adam
+      params:
+        lr: 0.001
+        weight_decay: 0.005
+gaston_freq_threshold: 0.1
+input_data_root: ./dataset
+output_root: ./.output
+dataset:
+  src: egr
+  data_class: Fullerenes
+  init_features:
+    dim: 18
+    strategy: static_random
+  noise:
+    type:
+      - labels
+    fraction: 0.1
+  params:
+    name: C74-D3h
+    force_reload: true
+    log: false
+steps:
+  - type: train
+  - type: explain
+    denoise_threshold: 25
+  - type: annotate
+    largest_frequent_pattern: 12
+    maximal_only: false
+    feature_importance:
+      min_iteration: 1
+      aggregation: sum
+      threshold:
+        type: single # multi
+        filter: median

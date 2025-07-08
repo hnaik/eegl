@@ -1,0 +1,38 @@
+---
+run_id: "230307"
+iterations:
+  - L
+  - R
+  # - P1
+  - P2
+cuda: 0
+ba_count: 600
+num_nodes: 1880
+gpu: true
+index_file_name: indices-1880.json
+root_path: /data/results
+features_file: features-1880.npy
+gaston_freq_threshold: 0.7
+nproc: 64
+random_feature_id: 1
+variants:
+  - p007
+  - p008
+  - p009
+sample_ids:
+  # - "0001"
+  - "0002"
+  - "0003"
+  - "0004"
+  - "0005"
+steps:
+  - name: Train
+    type: train
+    average_strategy: weighted
+    confusion_matrix_normalize: all
+    num_epochs: 1000
+  # - name: Explain
+  #   type: explain
+  #   mask_act: sigmoid
+  #   mask_bias: False
+  #   num_epochs: 100

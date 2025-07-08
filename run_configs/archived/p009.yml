@@ -1,0 +1,19 @@
+---
+run_id: "dev"
+iterations:
+  - 0
+  - 1
+  - 2
+root_path: /data/results
+variants:
+  - p009
+sample_ids:
+  - "0001"
+  - "0002"
+  - "0003"
+  - "0004"
+  - "0005"
+steps:
+  - type: train
+  - type: explain
+  - type: annotate

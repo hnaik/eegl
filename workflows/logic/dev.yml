@@ -1,0 +1,43 @@
+---
+folds:
+  begin: 1
+  end: 3
+spec:
+  average_strategy: weighted
+  confusion_matrix_normalize: all
+  dropout: 0.5
+  implementation: pyg
+  output_root: ./.output
+  reproducibility:
+    seed: 43
+rule_config:
+  name: five_neighbors
+  transform: egr_logic
+  force_reload: false
+train_params:
+  epochs: 100
+  hidden_dim: 16
+  dropout: 0.5
+  dataset_id: 0
+  data_id: 0
+  opt_params:
+    name: Adam
+    params:
+      lr: 0.001
+      weight_decay: 0.0005
+structures:
+  - src: egr
+    data_class: Grid2DLogicDataset
+    num_samples: 10
+    data_params:
+      rows: 20
+      cols: 20
+      frac: 0.1
+  - src: egr
+    data_class: CycleNeighborsLogicDataset
+    num_samples: 10
+    sort: desc-node # asc-node, desc-node, asc-edge, desc-edge
+    data_params:
+      low: 32
+      high: 128
+      neighbors: 5

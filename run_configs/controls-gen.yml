@@ -1,0 +1,30 @@
+---
+num_dim: 10
+root_dir: ./dataset
+train_fraction: 0.8
+types:
+  - indices # Always keep this OFF unless new dataset with new  number of nodes
+  # - default
+  # - label
+  # - random
+  # - pattern
+variant_list:
+  # - p001-01
+  # - p001-02
+  # - p001-03
+  # - p001-04
+  # - p001-05
+  # - p007
+  # - p007-02
+  # - p008
+  # - p008-02_small
+  # - p009
+  # - p010
+  # - hexagon
+  # - C60
+  - C70
+  - G180
+# pattern_names:
+#   - P2
+#   - P3
+#   - P4

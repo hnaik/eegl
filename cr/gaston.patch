@@ -1,0 +1,10 @@
+--- main.cpp	2022-06-07 02:04:57.177752989 +0000
++++ main-orig.cpp	2022-06-07 02:04:52.101752410 +0000
+@@ -7,6 +7,7 @@
+ #include "misc.h"
+ #include "graphstate.h"
+ #include <time.h>
++#include <getopt.h>
+ 
+ using namespace std;
+ 

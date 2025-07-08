@@ -1,0 +1,15 @@
+---
+run_id: "dev"
+iterations:
+  - 0
+  - 1
+  - 2
+root_path: /data/results
+variants:
+  - hexagon
+sample_ids:
+  - "0001"
+steps:
+  - type: train
+  - type: explain
+  - type: annotate

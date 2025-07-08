@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: egr-{{ job_id }}
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      containers:
+      - name: egr-{{ job_id }}
+        image: {{ docker_image }}
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: tmp-input
+          mountPath: /input
+        - name: tmp-output
+          mountPath: /output
+        - name: tmp-cache
+          mountPath: /cache
+        - name: rclone-config
+          mountPath: /home/egr/.config/rclone
+        resources:
+          limits:
+            memory: 64Gi
+            cpu: 64
+            nvidia.com/gpu: 1
+          requests:
+            memory: 1500Mi
+            cpu: 2
+            nvidia.com/gpu: 1
+        env:
+        - name: INSIDE_DOCKER
+          value: "1"
+        - name: INPUT_FILE
+          value: {{ input_file }}
+      volumes:
+      - name: tmp-input
+        emptyDir: {}
+      - name: tmp-output
+        emptyDir:
+          medium: Memory
+      - name: tmp-cache
+        emptyDir: {}
+      - name: rclone-config
+        configMap:
+          name: rclone-config
+      restartPolicy: Never
+  backoffLimit: 1

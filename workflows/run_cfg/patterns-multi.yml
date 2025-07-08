@@ -1,0 +1,27 @@
+---
+root_path: /data/results/input_data
+# features_file: features.npy
+nproc: 72
+data_dim: 10
+variants:
+  - "p001"
+  - "p001-02"
+  - "p001-03"
+  - "p001-04"
+  - "p007"
+  - "p008"
+  - "p009"
+  - "p010"
+sample_ids:
+  # - "0001"
+  # - "0002"
+  # - "0003"
+  - "0004"
+  - "0005"
+pattern_names:
+  - "P2"
+  # - "P1"
+steps:
+  - name: Gaston Annotation
+    type: annotate
+    data_dim: 10
