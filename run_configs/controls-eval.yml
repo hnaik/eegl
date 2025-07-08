@@ -1,0 +1,19 @@
+---
+run_id: sample
+iterations:
+  - L
+  - R
+  - P4
+input_data_root: ./dataset
+output_root: ./.output
+variants:
+  - m1
+  - m1p
+  - m1pp
+  - m2
+  - m2p
+  - m2pp
+sample_ids:
+  - "0001"
+steps:
+  - type: train

@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: egr-pod
+spec:
+  containers:
+  - name: egr-pod
+    image: hnaik/egr-nautilus:latest
+    command: ["sleep", "infinity"]
+    volumeMounts:
+    - name: input
+      mountPath: /input
+    - name: output
+      mountPath: /output
+    - name: cache
+      mountPath: /cache
+    - name: rclone-config
+      mountPath: /home/egr/.config/rclone
+    resources:
+      limits:
+        memory: 6Gi
+        cpu: 16
+        nvidia.com/gpu: 1
+      requests:
+        memory: 4Gi
+        cpu: 1
+        nvidia.com/gpu: 1
+  volumes:
+  - name: input
+    emptyDir: {}
+  - name: output
+    emptyDir:
+      medium: Memory
+  - name: cache
+    emptyDir: {}
+  - name: rclone-config
+    configMap:
+      name: rclone-config
+  restartPolicy: Never

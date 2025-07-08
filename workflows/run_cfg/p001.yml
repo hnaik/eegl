@@ -1,0 +1,14 @@
+---
+run_id: "230316"
+iterations:
+  - 0
+root_path: /data/results
+variants:
+  - p001
+sample_ids:
+  - "0001"
+steps:
+  - type: train
+  - type: explain
+  - type: annotate
+    timeout_secs: 10

@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  egr-cr:
+    build:
+      context: .
+    container_name: egr-cr
+    hostname: egr-cr
+    network_mode: host
+    user: egr
+    volumes:
+      - ..:/home/egr/egr
+    working_dir: /home/egr/egr
+    command: /bin/sleep infinity

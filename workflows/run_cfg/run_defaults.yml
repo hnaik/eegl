@@ -1,0 +1,24 @@
+---
+cuda: 0
+gpu: true
+gaston_freq_threshold: 0.7
+nproc: 64
+random_feature_id: 1
+data_dim: 10
+steps:
+  train:
+    name: Train
+    average_strategy: weighted
+    confusion_matrix_normalize: all
+    num_epochs: 1000
+  explain:
+    name: Explain
+    mask_act: sigmoid
+    mask_bias: False
+    num_epochs: 200
+  histogram:
+    name: Histograms
+  annotate:
+    name: Gaston Annotation
+    average_strategy: binary
+    intermediate: true

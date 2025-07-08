@@ -1,0 +1,20 @@
+---
+run_id: "iclr-24"
+iterations:
+  - 0
+  - 1
+  - 2
+input_data_root: ./dataset
+output_root: ./.output
+variants:
+  - p008
+sample_ids:
+  - "0001"
+  - "0002"
+  - "0003"
+  - "0004"
+  - "0005"
+steps:
+  - type: train
+  - type: explain
+  - type: annotate

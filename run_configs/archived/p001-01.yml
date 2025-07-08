@@ -1,0 +1,21 @@
+---
+run_id: r240129-ying
+iterations:
+  - 0
+  - 1
+  - 2
+  - 3
+input_data_root: ./dataset
+output_root: ./.output
+use_feature_importance: true
+variants:
+  - p001-01
+sample_ids:
+  - "0001"
+steps:
+  - type: train
+    implementation: ying
+  - type: explain
+    implementation: ying
+  - type: annotate
+

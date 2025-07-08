@@ -1,0 +1,46 @@
+---
+p001:
+  desc: "M1"
+  details:
+    base_size: 300
+    total_size: 700
+p001-02:
+  desc: r"M1^{'}"
+  details:
+    base_size: 300
+    total_size: 700
+p001-03:
+  desc: r"M1^{''}"
+  details:
+    base_size: 300
+    total_size: 700
+p001-04:
+  desc: r"M1^{'''}"
+  details:
+    base_size: 300
+    total_size: 700
+p007:
+  desc: "M2"
+  details:
+    base_size: 600
+    total_size: 1880
+p008:
+  desc: r"M2^{'}"
+  details:
+    base_size: 600
+    total_size: 1880
+p009:
+  desc: r"M3"
+  details:
+    base_size: 600
+    total_size: 1880
+p010:
+  desc: r"M10"
+  details:
+    base_size: 600
+    total_size: 2663
+c60:
+  name: "Fullerene C-60"
+  details:
+    base_size: 60
+    total_size: 60

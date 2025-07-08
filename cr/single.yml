@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: egr-single
+  namespace: hnaik2
+  labels:
+    app: egr-single
+spec:
+  dnsConfig:
+    nameservers:
+      - 8.8.8.8
+  tolerations:
+    - key: "Tesla-V100-PCIE-32GB-SHARED"
+      operator: "Exists"
+      effect: "NoSchedule"
+  containers:
+    - image: hnaik2/cuda-user:latest
+      imagePullPolicy: Always
+      name: egr-single
+      args: ["sleep", "infinity"]
+      resources:
+        limits:
+          nvidia.com/gpu: "1"
+        requests:
+          memory: "100Mi"
+      volumeMounts:
+        - name: nfs-data
+          mountPath: /data
+        - name: nfs-home
+          mountPath: /home
+        - name: dshm
+          mountPath: /dev/shm
+  volumes:
+    - name: nfs-data
+      nfs:
+        server: 10.2.100.1
+        path: /data/nfs/hnaik2
+    - name: nfs-home
+      nfs:
+        server: 10.2.100.1
+        path: /data/nfs/hnaik2/sysroot/home
+    - name: nfs-opt
+      nfs:
+        server: 10.2.100.1
+        path: /data/nfs/hnaik2/sysroot/opt
+    - name: dshm
+      emptyDir:
+        medium: Memory
+  restartPolicy: Never

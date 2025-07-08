@@ -1,0 +1,45 @@
+---
+run_id: "230124-f0.7"
+iteration: 4
+cuda: 0
+data_prefix: ba_300_80
+ba_count: 300
+dataset: syn1
+gpu: true
+index_file_name: indices-700.json
+root_path: /data/results
+features_file: features.npy
+gaston_freq_threshold: 0.7
+nproc: 64
+random_feature_id: 1
+variants:
+  - v0
+sample_ids:
+  - "0001"
+  # - "0002"
+  # - "0003"
+  # - "0004"
+  # - "0005"
+  # - "0006"
+  # - "0007"
+  # - "0008"
+  # - "0009"
+  # - "0010"
+steps:
+  - name: Train
+    type: train
+  - name: Explain
+    type: explain
+    mask_act: sigmoid
+    mask_bias: False
+    node_range:
+      begin: 0
+      end: 699
+    num_epochs: 100
+  - name: Make Histograms
+    type: histogram
+  - name: Gaston Annotation
+    type: annotate
+    data_dim: 10
+    intermediate: true
+    nproc: 64

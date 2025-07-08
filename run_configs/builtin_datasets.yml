@@ -1,0 +1,63 @@
+---
+run_id: dev
+iterations:
+  - 0
+  - 1
+fold:
+  begin: 1
+  end: 1
+hidden_dim: auto
+annotate_dim: 32
+max_hidden_dim: 64
+gaston_freq_threshold: 0.4
+input_data_root: ./dataset
+output_root: ./.output
+dropout: 0.4
+dataset:
+  dataset_class: WebKB
+  params:
+    name: Cornell
+steps:
+  - type: train
+    implementation: pyg
+  - type: explain
+    implementation: pyg
+    num_epochs: 100
+    denoise_threshold: 20
+  - type: annotate
+    largest_frequent_pattern: 10
+    maximal_only: false
+
+
+# ---
+  # dataset_class: WebKB
+  # params:
+  #   name: Cornell
+# ---
+  # dataset_class: WikiCS
+
+# ---
+  # dataset_class: Airports
+  # params:
+  #   name: USA
+  #   transform: airports_usa
+
+# ---
+  # dataset_class: WikipediaNetwork
+  # params:
+  #   name: chameleon
+
+# ---
+  # dataset_class: Entities
+  # params:
+  #   name: MUTAG
+  #   transform: entities_mutag
+
+# ---
+  # dataset_class: Actor
+
+# ---
+  # dataset_class: CitationFull
+  # params:
+  #   name: Cora_ML
+  #   transform: citation_full_cora_ml
