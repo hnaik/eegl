@@ -99,4 +99,4 @@ streamlit:
 
 .PHONY: gaston
 gaston:
-	bash cr/install-3rd-party.sh
+	bash scripts/install-3rd-party.sh

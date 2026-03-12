@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM nvidia/cuda:12.6.2-cudnn-devel-ubuntu24.04 AS job
+FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -42,18 +42,15 @@ RUN apt-get remove -y \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
 
-ENV HOSTNAME="egr"
-RUN echo "egr" > /etc/hostname
+ENV HOSTNAME="eegl"
+RUN echo "eegl" > /etc/hostname
 
-RUN adduser --disabled-password --gecos '' egr
-RUN adduser egr sudo
+RUN adduser --disabled-password --gecos '' eegl
+RUN adduser eegl sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-COPY . /home/egr/egr
-RUN chown -R egr:egr /home/egr/egr
+COPY . /home/eegl/eegl
+RUN chown -R eegl:eegl /home/eegl/eegl
 
-USER egr
-WORKDIR /home/egr/egr
-ENV PYTHONPATH=/home/egr/egr
-RUN uv sync --frozen
-
-CMD ["/bin/bash", "/home/egr/egr/cr/default/entrypoint.sh"]
+USER eegl
+WORKDIR /home/eegl/eegl
+ENV PYTHONPATH=/home/eegl/eegl
