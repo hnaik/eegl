@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
+FROM docker.io/nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -12,7 +12,9 @@ RUN apt-get update -y -qq && \
     git-core \
     libboost-program-options-dev  \
     libboost-container-dev \
+    libgmp-dev \
     locales \
+    make \
     ninja-build \
     python3 \
     python3-dev \
@@ -42,14 +44,23 @@ RUN apt-get remove -y \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
 
+ARG UID=1000
+ARG GID=1000
+
 ENV HOSTNAME="eegl"
 RUN echo "eegl" > /etc/hostname
 
-RUN adduser --disabled-password --gecos '' eegl
-RUN adduser eegl sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-COPY . /home/eegl/eegl
-RUN chown -R eegl:eegl /home/eegl/eegl
+RUN set -e; \
+    existing_group=$(getent group ${GID} | cut -d: -f1 || true); \
+    if [ -n "$existing_group" ]; then groupmod -n eegl "$existing_group"; \
+    else groupadd --gid ${GID} eegl; fi; \
+    existing_user=$(getent passwd ${UID} | cut -d: -f1 || true); \
+    if [ -n "$existing_user" ]; then usermod -l eegl -d /home/eegl -m "$existing_user"; \
+    else useradd --uid ${UID} --gid ${GID} --create-home --shell /bin/bash eegl; fi; \
+    adduser eegl sudo; \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers; \
+    mkdir -p /home/eegl/eegl; \
+    chown eegl:eegl /home/eegl/eegl
 
 USER eegl
 WORKDIR /home/eegl/eegl

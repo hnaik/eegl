@@ -100,3 +100,12 @@ streamlit:
 .PHONY: gaston
 gaston:
 	bash scripts/install-3rd-party.sh
+
+.PHONY: process-fullerenes run-demo
+
+process-fullerenes:
+	uv run -m apps.process_fullerenes
+
+run-demo:
+	uv run -m workflows.run -c run_configs/dev.yml \
+		--run-defaults=run_configs/run_defaults.yml

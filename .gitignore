@@ -194,3 +194,4 @@ cython_debug/
 .cursorindexingignore
 .output
 .vscode
+dataset/pickled/
