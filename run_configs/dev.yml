@@ -35,9 +35,7 @@ dataset:
     dim: 18
     strategy: static_random
   noise:
-    type:
-      - labels
-    fraction: 0.25
+    label: 0.25
   params:
     name: C180-0
     # name: c38-c1-3
