@@ -101,7 +101,10 @@ streamlit:
 gaston:
 	bash scripts/install-3rd-party.sh
 
-.PHONY: process-fullerenes run-demo
+.PHONY: deps process-fullerenes run-demo
+
+deps:
+	uv sync --no-dev
 
 process-fullerenes:
 	uv run -m apps.process_fullerenes
