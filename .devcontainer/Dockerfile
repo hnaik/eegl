@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM nvidia/cuda:12.6.2-cudnn-devel-ubuntu24.04 AS job-compaas
+FROM docker.io/nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,20 +8,23 @@ RUN apt-get update -y -qq && \
     binutils \
     cmake \
     curl \
-    g++ \
+    gcc g++ \
     git-core \
+    libboost-program-options-dev  \
     libboost-container-dev \
-    libboost-program-options-dev \
+    libgmp-dev \
     locales \
+    make \
     ninja-build \
     python3 \
     python3-dev \
     sudo \
     sysvinit-utils \
-    tzdata \
-    xz-utils
+    tzdata
 
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 RUN mkdir external && \
     cd /external && \
@@ -41,16 +44,24 @@ RUN apt-get remove -y \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
 
-RUN addgroup --gid 4126 egr && \
-    adduser --disabled-password --gecos '' --uid 4126 --gid 4126 egr && \
-    adduser egr sudo && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+ARG UID=1000
+ARG GID=1000
 
-ENV HOSTNAME='egr-compaas'
-RUN echo $HOSTNAME > /etc/hostname
+ENV HOSTNAME="eegl"
+RUN echo "eegl" > /etc/hostname
 
-USER egr
-WORKDIR /home/egr/egr
-ENV PYTHONPATH=/home/egr/egr
+RUN set -e; \
+    existing_group=$(getent group ${GID} | cut -d: -f1 || true); \
+    if [ -n "$existing_group" ]; then groupmod -n eegl "$existing_group"; \
+    else groupadd --gid ${GID} eegl; fi; \
+    existing_user=$(getent passwd ${UID} | cut -d: -f1 || true); \
+    if [ -n "$existing_user" ]; then usermod -l eegl -d /home/eegl -m "$existing_user"; \
+    else useradd --uid ${UID} --gid ${GID} --create-home --shell /bin/bash eegl; fi; \
+    adduser eegl sudo; \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers; \
+    mkdir -p /home/eegl/eegl; \
+    chown eegl:eegl /home/eegl/eegl
 
-CMD ["/bin/bash", "/home/egr/egr/cr/compaas/entrypoint.sh"]
+USER eegl
+WORKDIR /home/eegl/eegl
+ENV PYTHONPATH=/home/eegl/eegl

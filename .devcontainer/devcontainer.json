@@ -1,0 +1,12 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "remoteUser": "eegl",
+    "containerUser": "eegl",
+    "postCreateCommand": "uv sync",
+    "remoteEnv": {
+        "PYTHONPATH": "."
+    }
+}

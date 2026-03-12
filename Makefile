@@ -47,7 +47,7 @@ clean:
 
 .PHONY: distclean
 distclean: clean
-	mamba env remove -p $(ENV)
+	rm -rf $(ENV)
 
 .PHONY: docker
 docker-%:
@@ -99,4 +99,16 @@ streamlit:
 
 .PHONY: gaston
 gaston:
-	bash cr/install-3rd-party.sh
+	bash scripts/install-3rd-party.sh
+
+.PHONY: deps process-fullerenes run-demo
+
+deps:
+	uv sync --no-dev
+
+process-fullerenes:
+	uv run -m apps.process_fullerenes
+
+run-demo:
+	uv run -m workflows.run -c run_configs/dev.yml \
+		--run-defaults=run_configs/run_defaults.yml

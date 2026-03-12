@@ -1,0 +1,18 @@
+[project]
+name = "eegl"
+version = "0.1.0"
+description = "Explanation Enhanced Graph Learning (EEGL)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "coloredlogs>=15.0.1",
+    "igraph>=1.0.0",
+    "joblib>=1.5.3",
+    "networkx>=3.6.1",
+    "optuna>=4.7.0",
+    "pandas>=3.0.1",
+    "rdflib>=7.6.0",
+    "scikit-learn>=1.8.0",
+    "torch>=2.10.0",
+    "torch-geometric>=2.7.0",
+]

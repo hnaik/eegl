@@ -5,6 +5,6 @@
  #include "graphstate.h"
  #include <time.h>
 +#include <getopt.h>
- 
+
  using namespace std;
- 
+

@@ -14,6 +14,7 @@ LOG = logging.getLogger('process_fullerenes')
 # https://nanotube.msu.edu/fullerene/C720/C720-0.xyz
 # ROOT_URL = 'https://nanotube.msu.edu/fullerene/'
 FULLERENES = [
+    {'name': 'C60', 'variant': 'C60', 'atoms': 60},    
     {'name': 'C180', 'variant': 'C180-0', 'atoms': 180},
     {'name': 'C240', 'variant': 'C240-0', 'atoms': 240},
     {'name': 'C260', 'variant': 'C260-0', 'atoms': 260},
