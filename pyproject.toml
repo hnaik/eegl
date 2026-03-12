@@ -8,6 +8,7 @@ dependencies = [
     "coloredlogs>=15.0.1",
     "igraph>=1.0.0",
     "joblib>=1.5.3",
+    "marimo[lsp]>=0.20.4",
     "networkx>=3.6.1",
     "optuna>=4.7.0",
     "pandas>=3.0.1",
@@ -16,3 +17,11 @@ dependencies = [
     "torch>=2.10.0",
     "torch-geometric>=2.7.0",
 ]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "tab"
+docstring-code-format = true
