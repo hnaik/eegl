@@ -44,11 +44,7 @@ ENV EEGL_SOLVER_PATH=/external/glasgow_subgraph_solver
 COPY . /home/egr/egr
 ENV PYTHONPATH=/home/egr/egr
 
-RUN curl -Ls micro.mamba.pm/install.sh | bash -s -- && \
-    mv /root/.local/bin/micromamba /usr/local/bin/micromamba && \
-    mkdir /usr/local/pkgs
-
-ENV MAMBA_ROOT_PREFIX=/usr/local/pkgs
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 RUN apt-get remove -y \
     cmake curl g++ git-core ninja-build && \
@@ -62,15 +58,13 @@ RUN addgroup --gid 4126 egr && \
     adduser --disabled-password --gecos '' --uid 4126 --gid 4126 egr && \
     adduser egr sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
-    chown -R egr:egr /home/egr && \
-    chown -R egr:egr /usr/local/pkgs
+    chown -R egr:egr /home/egr
 
 USER egr
 WORKDIR /home/egr/egr
 ENV HOSTNAME=egr-compaas
 
-RUN micromamba shell init -s bash -r /home/egr/micromamba
-RUN micromamba env create -p ./.venv -f cr/compaas/environment.yml
+RUN uv sync --frozen
 
 CMD ["/bin/bash", "/home/egr/egr/cr/compaas/entrypoint.sh"]
 
@@ -85,7 +79,7 @@ USER egr
 WORKDIR /home/egr/egr
 ENV HOSTNAME=egr
 
-RUN micromamba env create -p ./.venv -f cr/default/environment.yml
+RUN uv sync --frozen
 
 CMD ["/bin/bash", "/home/egr/egr/cr/default/entrypoint.sh"]
 
@@ -104,6 +98,6 @@ USER egr
 WORKDIR /home/egr/egr
 ENV HOSTNAME=egr-nautilus
 
-RUN micromamba env create -p ./.venv -f cr/nautilus/environment.yml
+RUN uv sync --frozen
 
 CMD ["/bin/bash", "/home/egr/egr/cr/nautilus/entrypoint.sh"]

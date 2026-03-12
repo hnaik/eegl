@@ -35,12 +35,7 @@ RUN apt-get update -y -qq && \
 
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
-RUN curl -sSL "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" -o /tmp/mamba.sh \
-    && bash /tmp/mamba.sh -bfp /usr/local \
-    && update-alternatives --install /usr/local/bin/conda conda /usr/local/bin/mamba 0
-
-RUN curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba \
-    && cp bin/micromamba /usr/local/micromamba
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 COPY ./install-3rd-party.sh /tmp/
 COPY ./gaston.patch /tmp/
@@ -52,7 +47,6 @@ RUN echo $HOSTNAME > /etc/hostname
 RUN adduser --disabled-password --gecos '' egr
 RUN adduser egr sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN chown -R egr:egr /usr/local/pkgs
 
 USER egr
 WORKDIR /home/egr

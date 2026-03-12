@@ -47,7 +47,7 @@ clean:
 
 .PHONY: distclean
 distclean: clean
-	mamba env remove -p $(ENV)
+	rm -rf $(ENV)
 
 .PHONY: docker
 docker-%:

@@ -22,9 +22,7 @@ RUN apt-get update -y -qq && \
 
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
-RUN curl -Ls micro.mamba.pm/install.sh | bash -s -- && \
-    mv /root/.local/bin/micromamba /usr/local/bin/micromamba && \
-    ln -s /usr/local/bin/micromamba /usr/local/bin/mamba
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 RUN mkdir external && \
     cd /external && \
@@ -50,14 +48,12 @@ RUN echo "egr" > /etc/hostname
 RUN adduser --disabled-password --gecos '' egr
 RUN adduser egr sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN chown -R egr:egr /usr/local/pkgs
-    
 COPY . /home/egr/egr
 RUN chown -R egr:egr /home/egr/egr
 
 USER egr
 WORKDIR /home/egr/egr
 ENV PYTHONPATH=/home/egr/egr
-RUN mamba env create -p .venv -f cr/default/environment.yml
+RUN uv sync --frozen
 
 CMD ["/bin/bash", "/home/egr/egr/cr/default/entrypoint.sh"]
